@@ -15,7 +15,7 @@ def file_read():
             k=i.split("_")
             list2.append(k[0])
             #v1 / v300
-        #print(list2)
+        print("Extracted versions:", list2)
     else:
            print("list is empty")
 
