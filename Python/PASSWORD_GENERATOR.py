@@ -20,15 +20,25 @@ gui.geometry('250x200')
 gui.resizable(0,0)
 
 def process():
-    length = int(string_pass.get())
+    # Validate length input
+    length_str = str(string_pass.get()).strip()
+    if not length_str.isdigit():
+        messagebox.showerror('Error', 'Please enter a valid integer for password length (e.g. 12)')
+        return
+    length = int(length_str)
 
     lower = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
     upper = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
     num = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
     special = ['@', '#', '$', '%', '&', '*']
     all = lower + upper + num + special
-    ran = random.sample(all,length)
-    password = "".join(ran)
+    # Ensure requested length does not exceed available unique characters when using random.sample
+    if length > len(all):
+        # fall back to choices which allows repeats
+        password = ''.join(random.choice(all) for _ in range(length))
+    else:
+        ran = random.sample(all, length)
+        password = "".join(ran)
     messagebox.showinfo('Result', 'Your password {} \n\nPassword copied to clipboard'.format(password))
     pyperclip.copy(password)
 
